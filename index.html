@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Draw N Guess</title>
+  <style>
+    body {
+      text-align:center;
+    }
+    #board {
+      border: 1px solid black;
+      touch-action: none;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="board" width="640" height="640" style="width:320px;height:320px;">
+    Opps, you cannot play draw N guess with this browser!
+  </canvas>
+
+  <script src="js/pep.js"></script>
+  <script>
+    var Board = {
+      dom: null,
+      ctx: null,
+      pos: {
+        x: 0,
+        y: 0,
+        x0: -1,
+        y0: -1
+      },
+      init: function init(canvasId) {
+        this.dom = document.getElementById(canvasId);
+        this.ctx = this.dom.getContext('2d');
+        this.pos.x = this.dom.offsetLeft;
+        this.pos.y = this.dom.offsetTop;
+        var self = this;
+        window.addEventListener('resize', function(e) {
+          self.pos.x = self.dom.offsetLeft;
+          self.pos.y = self.dom.offsetTop;
+          console.log('window resized');
+        });
+      }
+    }
+    Board.init('board');
+
+    var pointer = {};
+
+    function checkEraseKeys(e) {
+      if (e.buttons === 32) return true;
+      else if (e.buttons === 1 && e.shiftKey) return true;
+      return false;
+    }
+    function checkMenuKey(e) {
+      return (e.buttons === 1 && e.ctrlKey);
+    }
+
+    function openMenu(e) {
+      console.log('Menu', e.pageX, e.pageY);
+    }
+
+    Board.dom.addEventListener('pointerdown', function(e) {
+
+      pointer.x = (e.pageX - Board.pos.x) * 2;
+      pointer.y = (e.pageY - Board.pos.y) * 2;
+      pointer.x0 = pointer.x - 1;
+      pointer.y0 = pointer.y - 1;
+      pointer.isErase = checkEraseKeys(e);
+
+      if (checkMenuKey(e)) {
+        openMenu(e);
+      } else {
+        pointer.isClicked = true;
+        drawOnCanvas(pointer, e);
+      }
+
+    });
+
+    Board.dom.addEventListener('pointerup', function(e) {
+      pointer.x = (e.pageX - Board.pos.x) * 2;
+      pointer.y = (e.pageY - Board.pos.y) * 2;
+      pointer.isClicked = false;
+      pointer.y0 = -1;
+      pointer.x0 = -1;
+    });
+    Board.dom.addEventListener('pointerleave', function(e) {
+      pointer.x = (e.pageX - Board.pos.x) * 2;
+      pointer.y = (e.pageY - Board.pos.y) * 2;
+      pointer.isClicked = false;
+      pointer.y0 = -1;
+      pointer.x0 = -1;
+    });
+
+    Board.dom.addEventListener('pointermove', function(e) {
+      if (pointer.isClicked) {
+        pointer.x = (e.pageX - Board.pos.x) * 2;
+        pointer.y = (e.pageY - Board.pos.y) * 2;
+        drawOnCanvas(pointer, e);
+      }
+    });
+
+
+    Board.ctx.lineJoin = "round";
+    var config = {
+      sensitivity: true
+    };
+    function drawOnCanvas(pointer, e) {
+      if (pointer.isErase) { // erase
+        Board.ctx.lineWidth = 20;
+        Board.ctx.strokeStyle = "#FFFFFF";
+      } else {
+        Board.ctx.lineWidth = (config.sensitivity) ? e.pressure * 8 : 4;
+        Board.ctx.strokeStyle = "#222222";
+      }
+
+
+      if (pointer.x0 > 0) {
+        Board.ctx.beginPath();
+        Board.ctx.moveTo(pointer.x0, pointer.y0)
+        Board.ctx.lineTo(pointer.x, pointer.y);
+        Board.ctx.closePath();
+        Board.ctx.stroke();
+      }
+
+      pointer.x0 = pointer.x;
+      pointer.y0 = pointer.y;
+    }
+  </script>
+</body>
+</html>
