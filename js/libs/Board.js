@@ -36,9 +36,9 @@ var Board = (function() {
       var margin = 10;
 
       var heightCss = window.innerHeight - margin;
-      var heightCanvas = height * this.resolution;
+      var heightCanvas = heightCss * this.resolution;
       var widthCss = window.innerWidth - margin;
-      var widthCanvas = width * this.resolution;
+      var widthCanvas = widthCss * this.resolution;
 
       // If new size is larger than memory
       if (widthCanvas > this.domMem.width || heightCanvas > this.domMem.height) {
