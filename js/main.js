@@ -1,94 +1,50 @@
 
 Board.init('board');
+Pen.init(Board.ctx);
+Pointer.init();
 
-function checkEraseKeys(e) {
-  if (e.buttons === 32) return true;
-  else if (e.buttons === 1 && e.shiftKey) return true;
-  return false;
+// Attach event listener
+Board.dom.addEventListener('Pointerdown', function(e) {
+  Pointer.pos1.x = (e.pageX - Board.pos.x) * Board.resolution;
+  Pointer.pos1.y = (e.pageY - Board.pos.y) * Board.resolution;
+  Pointer.pos0.x = Pointer.pos1.x - 1;
+  Pointer.pos0.y = Pointer.pos1.y - 1;
+
+  Pen.configure(Board.ctx, e);
+  if (Pen.funcType.isMenu) openMenu(e);
+  else {
+    Pointer.isClicked = true;
+    drawOnCanvas(Pointer, e);
+  }
+});
+var leaveBoard = function leaveBoard(e) {
+  Pen.release();
+  Pointer.release();
+  Pointer.pos1.x = (e.pageX - Board.pos.x) * Board.resolution;
+  Pointer.pos1.y = (e.pageY - Board.pos.y) * Board.resolution;
 }
-function checkMenuKey(e) {
-  return (e.buttons === 1 && e.ctrlKey);
-}
-
-function openMenu(e) {
-  console.log('Menu', e.pageX, e.pageY);
-}
-
-var touchOffset = 0;
-Board.dom.addEventListener('pointerdown', function(e) {
-  var offset = 0;
-  if (e.pointerType === 'touch') {
-    offset = touchOffset;
-  }
-  pointer.pos1.x = (e.pageX + offset - Board.pos.x) * Board.resolution;
-  pointer.pos1.y = (e.pageY + offset - Board.pos.y) * Board.resolution;
-  pointer.pos0.x = pointer.pos1.x - 1;
-  pointer.pos0.y = pointer.pos1.y - 1;
-  pointer.isErase = checkEraseKeys(e);
-
-  if (checkMenuKey(e)) {
-    openMenu(e);
-  } else {
-    pointer.isClicked = true;
-    drawOnCanvas(pointer, e);
-  }
-
-});
-
-Board.dom.addEventListener('pointerup', function(e) {
-  pointer.pos1.x = (e.pageX - Board.pos.x) * Board.resolution;
-  pointer.pos1.y = (e.pageY - Board.pos.y) * Board.resolution;
-  pointer.isClicked = false;
-  pointer.pos0.y = -1;
-  pointer.pos0.x = -1;
-});
-Board.dom.addEventListener('pointerleave', function(e) {
-  pointer.pos1.x = (e.pageX - Board.pos.x) * Board.resolution;
-  pointer.pos1.y = (e.pageY - Board.pos.y) * Board.resolution;
-  pointer.isClicked = false;
-  pointer.pos0.y = -1;
-  pointer.pos0.x = -1;
-});
-
-Board.dom.addEventListener('pointermove', function(e) {
-  if (pointer.isClicked) {
-    var offset = 0;
-    if (e.pointerType === 'touch') {
-      offset = touchOffset;
-    }
-    pointer.pos1.x = (e.pageX + offset - Board.pos.x) * Board.resolution;
-    pointer.pos1.y = (e.pageY + offset - Board.pos.y) * Board.resolution;
-    drawOnCanvas(pointer, e);
+Board.dom.addEventListener('Pointerup', leaveBoard);
+Board.dom.addEventListener('Pointerleave', leaveBoard);
+Board.dom.addEventListener('Pointermove', function(e) {
+  if (Pointer.isClicked) {
+    Pointer.pos1.x = (e.pageX - Board.pos.x) * Board.resolution;
+    Pointer.pos1.y = (e.pageY - Board.pos.y) * Board.resolution;
+    drawOnCanvas(Pointer, e);
   }
 });
 
-Board.ctx.lineJoin = "round";
-Board.ctx.imageSmoothingEnabled = true;
-var config = {
-  sensitivity: true
-};
-function drawOnCanvas(pointer, e) {
-  if (pointer.isErase) { // erase
-    Board.ctx.lineWidth = 20;
-    Board.ctx.strokeStyle = "#FFFFFF";
-  } else {
-    Board.ctx.strokeStyle = "#222222";
-    if (e.pointerType === 'touch') {
-      Board.ctx.lineWidth = (((e.width + e.height) / 2) - 20) / 5;
-    } else {
-      Board.ctx.lineWidth = (config.sensitivity) ? e.pressure * 8 : 4;
-    }
-  }
+// Draw method
+function drawOnCanvas(Pointer, e) {
+  Pen.configure(Board.ctx, e);
 
-
-  if (pointer.pos0.x > 0) {
+  if (Pointer.pos0.x > 0) {
     Board.ctx.beginPath();
-    Board.ctx.moveTo(pointer.pos0.x, pointer.pos0.y)
-    Board.ctx.lineTo(pointer.pos1.x, pointer.pos1.y);
+    Board.ctx.moveTo(Pointer.pos0.x, Pointer.pos0.y)
+    Board.ctx.lineTo(Pointer.pos1.x, Pointer.pos1.y);
     Board.ctx.closePath();
     Board.ctx.stroke();
   }
 
-  pointer.pos0.x = pointer.pos1.x;
-  pointer.pos0.y = pointer.pos1.y;
+  Pointer.pos0.x = Pointer.pos1.x;
+  Pointer.pos0.y = Pointer.pos1.y;
 }

@@ -12,11 +12,13 @@ var Board = (function() {
      init: function init(canvasId) {
        this.dom = document.getElementById(canvasId);
        this.ctx = this.dom.getContext('2d');
-       fitToWindow.bind(this)();
 
-       this.pos.x = this.dom.offsetLeft;
-       this.pos.y = this.dom.offsetTop;
-       window.addEventListener('resize', resize.bind(this));
+       // Set up sizing
+       fitToWindow.bind(this)();
+       window.addEventListener('resize', fitToWindow.bind(this));
+
+       // Additional Configuration
+       this.ctx.imageSmoothingEnabled = true;
      }
    };
 
@@ -43,10 +45,6 @@ var Board = (function() {
       this.dom.width = width2;
       this.dom.height = height2;
       this.ctx.drawImage(temp_cnvs, 0, 0);
-    }
-
-    var resize = function resize(event) {
-      fitToWindow.bind(this)();
 
       this.pos.x = this.dom.offsetLeft;
       this.pos.y = this.dom.offsetTop;
