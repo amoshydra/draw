@@ -16,6 +16,10 @@ var Pointer = (function() {
     },
     init: function init() {
       this.release();
+    },
+    set: function set(pos) {
+      this.pos1.x = pos.x;
+      this.pos1.y = pos.y;
     }
   };
   return pointer;

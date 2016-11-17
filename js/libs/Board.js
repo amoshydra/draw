@@ -19,6 +19,12 @@ var Board = (function() {
 
        // Additional Configuration
        this.ctx.imageSmoothingEnabled = true;
+     },
+     getPointerPos: function getPointerPos(event) {
+       return pos = {
+         x: (event.pageX - this.pos.x) * this.resolution,
+         y: (event.pageY - this.pos.y) * this.resolution
+       }
      }
    };
 

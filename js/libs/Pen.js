@@ -8,10 +8,11 @@ var Pen = (function() {
     lineWidth: 4,
     type: 'mouse',
     lineJoin: 'round',
-    funcType: {
-      isErase: false,
-      isDraw: false,
-      isMenu: false
+    funcType: null,
+    funcTypes: {
+      draw: 'draw',
+      erase: 'draw erase',
+      menu: 'menu'
     },
     init: function init(context) {
       context.lineJoin = this.lineJoin;
@@ -22,36 +23,42 @@ var Pen = (function() {
       context.lineWidth = config.lineWidth;
       context.strokeStyle = config.color;
     },
-    getLineWidth: function getLineWidth(e) {
-      switch (e.pointerType) {
-        case 'touch': return (e.width + e.height - 40) / 10;
-        case 'pen': return e.pressure * 8;
-        default: return (e.pressure) ? e.pressure * 8 : 4;
-      }
+    setFuncType: function setFuncType(pointerEvent) {
+      if      (checkMenuKey(pointerEvent)) this.funcType = this.funcTypes.menu;
+      else if (checkEraseKeys(pointerEvent)) this.funcType = this.funcTypes.erase;
+      else this.funcType = this.funcTypes.draw;
+      return this.funcType;
     },
-    configure: function configure(context, pointerEvent) {
-
-      if (this.funcType.isMenu = checkMenuKey(pointerEvent)) {}
-      else if (this.funcType.isErase = checkEraseKeys(pointerEvent)) {
-        this.set(context, {
-          color: this.colors.bg,
-          lineWidth: 20
-        });
-      } else {
-        this.funcType.isDraw = true;
-        this.set(context, {
-          color: this.colors.fg,
-          lineWidth: this.getLineWidth(pointerEvent)
-        })
+    setPen: function setPen(context, pointerEvent) {
+      switch(this.funcType) {
+        case this.funcTypes.erase: {
+          this.set(context, {
+            color: this.colors.bg,
+            lineWidth: 20
+          });
+          break;
+        }
+        case this.funcTypes.draw: {
+          this.set(context, {
+            color: this.colors.fg,
+            lineWidth: getLineWidth(pointerEvent)
+          });
+          break;
+        }
       }
     },
     release: function release() {
-      this.funcType.isDraw = false;
-      this.funcType.isMenu = false;
-      this.funcType.isErase = false;
+      this.funcType = null;
     }
   }
 
+  var getLineWidth = function getLineWidth(e) {
+    switch (e.pointerType) {
+      case 'touch': return (e.width + e.height - 40) / 10;
+      case 'pen': return e.pressure * 8;
+      default: return (e.pressure) ? e.pressure * 8 : 4;
+    }
+  }
 
   var checkEraseKeys = function checkEraseKeys(e) {
     if (e.buttons === 32) return true;
