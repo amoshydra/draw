@@ -5,7 +5,6 @@ Pointer.init();
 
 // Attach event listener
 var leaveBoard = function leaveBoard(e) {
-  console.log('do your job');
   Pen.release();
   Pointer.release();
 };
@@ -14,7 +13,7 @@ Board.dom.addEventListener('pointerdown', function(e) {
   Pointer.set(Board.getPointerPos(e));
   // Get function type
   Pen.setFuncType(e);
-  if (Pen.funcType === Pen.funcTypes.menu) alert('Open Menu');
+  if (Pen.funcType === Pen.funcTypes.menu) alert('A menu should be opened in the future');
   else drawOnCanvas(e, Pointer, Pen);
 });
 
