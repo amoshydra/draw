@@ -1,9 +1,8 @@
 var Pen = (function() {
   var pen = {
-    color: '#222222',
     colors: {
-      fg: '#222222',
-      bg: '#FFFFFF'
+      fg: '#555',
+      bg: '#FFF'
     },
     lineWidth: 4,
     type: 'mouse',
@@ -34,7 +33,7 @@ var Pen = (function() {
         case this.funcTypes.erase: {
           this.set(context, {
             color: this.colors.bg,
-            lineWidth: 20
+            lineWidth: 25
           });
           break;
         }
@@ -56,7 +55,7 @@ var Pen = (function() {
     switch (e.pointerType) {
       case 'touch': {
         if (e.width < 10 && e.height < 10) {
-          return (e.width + e.height) * 2;
+          return (e.width + e.height) * 2 + 20;
         } else {
           return (e.width + e.height - 40) / 2;
         }
