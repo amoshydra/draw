@@ -72,9 +72,14 @@ function drawOnCanvas(pointer, e) {
     Board.ctx.lineWidth = 20;
     Board.ctx.strokeStyle = "#FFFFFF";
   } else {
-    Board.ctx.lineWidth = (config.sensitivity) ? e.pressure * 8 : 4;
     Board.ctx.strokeStyle = "#222222";
+    if (e.pointerType === 'touch') {
+      Board.ctx.lineWidth = (((e.width + e.height) / 2) - 20) / 5;
+    } else {
+      Board.ctx.lineWidth = (config.sensitivity) ? e.pressure * 8 : 4;
+    }
   }
+
 
   if (pointer.pos0.x > 0) {
     Board.ctx.beginPath();
