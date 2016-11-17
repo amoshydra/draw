@@ -14,10 +14,14 @@ function openMenu(e) {
   console.log('Menu', e.pageX, e.pageY);
 }
 
+var touchOffset = 0;
 Board.dom.addEventListener('pointerdown', function(e) {
-
-  pointer.pos1.x = (e.pageX - Board.pos.x) * Board.resolution;
-  pointer.pos1.y = (e.pageY - Board.pos.y) * Board.resolution;
+  var offset = 0;
+  if (e.pointerType === 'touch') {
+    offset = touchOffset;
+  }
+  pointer.pos1.x = (e.pageX + offset - Board.pos.x) * Board.resolution;
+  pointer.pos1.y = (e.pageY + offset - Board.pos.y) * Board.resolution;
   pointer.pos0.x = pointer.pos1.x - 1;
   pointer.pos0.y = pointer.pos1.y - 1;
   pointer.isErase = checkEraseKeys(e);
@@ -48,8 +52,12 @@ Board.dom.addEventListener('pointerleave', function(e) {
 
 Board.dom.addEventListener('pointermove', function(e) {
   if (pointer.isClicked) {
-    pointer.pos1.x = (e.pageX - Board.pos.x) * Board.resolution;
-    pointer.pos1.y = (e.pageY - Board.pos.y) * Board.resolution;
+    var offset = 0;
+    if (e.pointerType === 'touch') {
+      offset = touchOffset;
+    }
+    pointer.pos1.x = (e.pageX + offset - Board.pos.x) * Board.resolution;
+    pointer.pos1.y = (e.pageY + offset - Board.pos.y) * Board.resolution;
     drawOnCanvas(pointer, e);
   }
 });
