@@ -33,11 +33,12 @@ var Board = (function() {
    };
 
     var fitToWindow = function fitToWindow() {
-      var margin = 10;
+      var marginX = 20;
+      var marginY = 10;
 
-      var heightCss = window.innerHeight - margin;
+      var heightCss = window.innerHeight - marginY;
       var heightCanvas = heightCss * this.resolution;
-      var widthCss = window.innerWidth - margin;
+      var widthCss = window.innerWidth - marginX;
       var widthCanvas = widthCss * this.resolution;
 
       // If new size is larger than memory
