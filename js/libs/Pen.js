@@ -54,7 +54,15 @@ var Pen = (function() {
 
   var getLineWidth = function getLineWidth(e) {
     switch (e.pointerType) {
-      case 'touch': return (e.width + e.height - 40) / 10;
+      case 'touch': {
+        if (e.radiuxX) {
+          return (e.radiuxX + e.radiuxY) * 2;
+        } else if (e.width === 1 && e.height === 1) {
+          return 4;
+        } else {
+          return (e.width + e.height - 40) / 10;
+        }
+      }
       case 'pen': return e.pressure * 8;
       default: return (e.pressure) ? e.pressure * 8 : 4;
     }
