@@ -47,8 +47,8 @@ var Board = (function() {
         var bufferCanvas = document.createElement('canvas');
         var bufferCtx = bufferCanvas.getContext('2d');
 
-        bufferCanvas.width = widthCanvas;
-        bufferCanvas.height = heightCanvas;
+        bufferCanvas.width = this.domMem.width;
+        bufferCanvas.height = this.domMem.height;
 
         // Clear buffer
         bufferCtx.fillStyle = '#ffffff';
@@ -56,10 +56,10 @@ var Board = (function() {
 
         // Save canvas to buffer
         bufferCtx.drawImage(this.dom, 0, 0);
-
+        
         // Resize memory
-        this.domMem.width = widthCanvas;
-        this.domMem.height = heightCanvas;
+        if (this.domMem.width < widthCanvas) this.domMem.width = widthCanvas;
+        if (this.domMem.height < heightCanvas) this.domMem.height = heightCanvas;
         this.ctxMem.drawImage(bufferCanvas, 0, 0);
       } else {
         this.ctxMem.drawImage(this.dom, 0 ,0);
