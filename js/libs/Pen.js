@@ -56,7 +56,7 @@ var Pen = (function() {
     switch (e.pointerType) {
       case 'touch': {
         if (e.width < 10 && e.height < 10) {
-          return (e.width + e.height) * 2 + 20;
+          return (e.width + e.height) * 2 + 10;
         } else {
           return (e.width + e.height - 40) / 2;
         }
