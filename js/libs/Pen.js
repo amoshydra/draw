@@ -21,6 +21,7 @@ var Pen = (function() {
     set: function set(context, config) {
       context.lineWidth = config.lineWidth;
       context.strokeStyle = config.color;
+      context.lineJoin = this.lineJoin;
     },
     setFuncType: function setFuncType(pointerEvent) {
       if      (checkMenuKey(pointerEvent)) this.funcType = this.funcTypes.menu;
