@@ -29,6 +29,12 @@ var Board = (function() {
          x: (event.pageX - this.pos.x) * this.resolution,
          y: (event.pageY - this.pos.y) * this.resolution
        }
+     },
+     loadToMemory: function loadToMemory(imageObj) {
+       this.domMem.width = img.width;
+       this.domMem.height = img.height;
+       this.ctxMem.drawImage(img, 0, 0);
+       this.ctx.drawImage(img, 0, 0);
      }
    };
 
@@ -56,7 +62,7 @@ var Board = (function() {
 
         // Save canvas to buffer
         bufferCtx.drawImage(this.dom, 0, 0);
-        
+
         // Resize memory
         if (this.domMem.width < widthCanvas) this.domMem.width = widthCanvas;
         if (this.domMem.height < heightCanvas) this.domMem.height = heightCanvas;

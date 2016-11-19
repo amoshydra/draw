@@ -1,44 +1,31 @@
 
 Board.init('board');
 Pen.init(Board.ctx);
-var pointerHash = {};
-var activePointerCount = 0;
 
 // Load canvas from local storage
 if (localStorage.dataURL) {
   var img = new window.Image();
   img.addEventListener('load', function() {
-
-    // Resize memory
-    Board.domMem.width = img.width;
-    Board.domMem.height = img.height;
-    Board.ctxMem.drawImage(img, 0, 0);
-    Board.ctx.drawImage(img, 0, 0);
+    Board.loadToMemory(img);
   });
   img.setAttribute('src', localStorage.dataURL);
 }
 
 // Attach event listener
+Pointer.onEmpty = function() {
+  Board.ctxMem.drawImage(Board.dom, 0, 0);
+  localStorage.setItem('dataURL', Board.domMem.toDataURL());
+}
 var leaveBoard = function leaveBoard(e) {
-  if (pointerHash[e.pointerId]) {
-    delete pointerHash[e.pointerId];
-    activePointerCount -= 1;
-
-    // Save canvas into localStorage
-    if (activePointerCount < 1) {
-      Board.ctxMem.drawImage(Board.dom, 0, 0);
-      localStorage.setItem('dataURL', Board.domMem.toDataURL());
-    }
-  }
+  Pointer.destruct(e.pointerId);
 };
+
 
 Board.dom.addEventListener('pointerdown', function(e) {
 
   // Initialise pointer
-  pointer = new Pointer();
+  pointer = new Pointer(e.pointerId);
   pointer.set(Board.getPointerPos(e));
-  pointerHash[e.pointerId] = pointer;
-  activePointerCount += 1;
 
   // Get function type
   Pen.setFuncType(e);
@@ -49,7 +36,7 @@ Board.dom.addEventListener('pointerdown', function(e) {
 Board.dom.addEventListener('pointermove', function(e) {
   if (Pen.funcType && Pen.funcType.includes(Pen.funcTypes.draw)) {
 
-    let pointer = pointerHash[e.pointerId];
+    var pointer = Pointer.get(e.pointerId);
     drawOnCanvas(e, pointer, Pen);
   }
 });
