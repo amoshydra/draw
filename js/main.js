@@ -1,47 +1,36 @@
 
+// Initialise application
 Board.init('board');
 Pen.init(Board.ctx);
-
-// Load canvas from local storage
-if (localStorage.dataURL) {
-  var img = new window.Image();
-  img.addEventListener('load', function() {
-    Board.loadToMemory(img);
-  });
-  img.setAttribute('src', localStorage.dataURL);
-}
+FloatingButton.init();
+FloatingButton.onClick = Board.clearMemory.bind(Board);
+Pointer.onEmpty = Board.storeMemory.bind(Board);
 
 // Attach event listener
-Pointer.onEmpty = function() {
-  Board.ctxMem.drawImage(Board.dom, 0, 0);
-  localStorage.setItem('dataURL', Board.domMem.toDataURL());
-}
-var leaveBoard = function leaveBoard(e) {
-  Pointer.destruct(e.pointerId);
-};
-
-
-Board.dom.addEventListener('pointerdown', function(e) {
-
+var pointerDown = function pointerDown(e) {
   // Initialise pointer
   pointer = new Pointer(e.pointerId);
   pointer.set(Board.getPointerPos(e));
 
   // Get function type
   Pen.setFuncType(e);
-  if (Pen.funcType === Pen.funcTypes.menu) alert('A menu should be opened in the future');
+  if (Pen.funcType === Pen.funcTypes.menu) Board.clearMemory();
   else drawOnCanvas(e, pointer, Pen);
-});
-
-Board.dom.addEventListener('pointermove', function(e) {
+}
+var pointerMove = function pointerMove(e) {
   if (Pen.funcType && Pen.funcType.includes(Pen.funcTypes.draw)) {
 
     var pointer = Pointer.get(e.pointerId);
     drawOnCanvas(e, pointer, Pen);
   }
-});
-Board.dom.addEventListener('pointerup', leaveBoard);
-Board.dom.addEventListener('pointerleave', leaveBoard);
+}
+var pointerCancel = function pointerLeave(e) {
+  Pointer.destruct(e.pointerId);
+}
+Board.dom.addEventListener('pointerdown', pointerDown);
+Board.dom.addEventListener('pointermove', pointerMove);
+Board.dom.addEventListener('pointerup', pointerCancel);
+Board.dom.addEventListener('pointerleave', pointerCancel);
 
 // Draw method
 function drawOnCanvas(e, pointerObj, Pen) {

@@ -5,13 +5,24 @@ var Board = (function() {
      ctx: null,
      domMem: null,
      ctxMem: null,
+     bgColor: '#ffffff',
      pos: {
        x: 0,
        y: 0
      },
+     loadToMemory: function loadToMemory(event) {
+       var imageObj = event.target;
+       this.domMem.width = imageObj.width;
+       this.domMem.height = imageObj.height;
+       this.ctxMem.drawImage(imageObj, 0, 0);
+       this.ctx.drawImage(imageObj, 0, 0);
+     },
      init: function init(canvasId) {
        this.dom = document.getElementById(canvasId);
        this.ctx = this.dom.getContext('2d');
+
+       // Additional Configuration
+       this.ctx.imageSmoothingEnabled = true;
 
        // Create buffer
        this.domMem = document.createElement('canvas');
@@ -21,8 +32,12 @@ var Board = (function() {
        fitToWindow.bind(this)();
        window.addEventListener('resize', fitToWindow.bind(this));
 
-       // Additional Configuration
-       this.ctx.imageSmoothingEnabled = true;
+       // Load canvas from local storage
+       if (localStorage.dataURL) {
+         var img = new window.Image();
+         img.addEventListener('load', this.loadToMemory.bind(this));
+         img.setAttribute('src', localStorage.dataURL);
+       }
      },
      getPointerPos: function getPointerPos(event) {
        return pos = {
@@ -30,16 +45,23 @@ var Board = (function() {
          y: (event.pageY - this.pos.y) * this.resolution
        }
      },
-     loadToMemory: function loadToMemory(imageObj) {
-       this.domMem.width = img.width;
-       this.domMem.height = img.height;
-       this.ctxMem.drawImage(img, 0, 0);
-       this.ctx.drawImage(img, 0, 0);
+     storeMemory: function storeMemory() {
+       this.ctxMem.drawImage(this.dom, 0, 0);
+       localStorage.setItem('dataURL', this.domMem.toDataURL());
+     },
+     clearMemory: function clearMemory() {
+       localStorage.clear();
+       this.ctx.fillStyle = this.bgColor;
+       this.ctx.fillRect(0,0, this.dom.width, this.dom.height);
+       this.domMem.width = this.dom.width;
+       this.domMem.height = this.dom.height;
+       this.ctxMem.fillStyle = this.bgColor;
+       this.ctxMem.fillRect(0,0, this.dom.width, this.dom.height);
      }
    };
 
     var fitToWindow = function fitToWindow() {
-      var marginX = 20;
+      var marginX = 10;
       var marginY = 10;
 
       var heightCss = window.innerHeight - marginY;
@@ -57,7 +79,7 @@ var Board = (function() {
         bufferCanvas.height = this.domMem.height;
 
         // Clear buffer
-        bufferCtx.fillStyle = '#ffffff';
+        bufferCtx.fillStyle = this.bgColor;
         bufferCtx.fillRect(0, 0, widthCanvas, heightCanvas);
 
         // Save canvas to buffer

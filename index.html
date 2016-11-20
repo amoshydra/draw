@@ -15,6 +15,16 @@
       touch-action: none;
       border: 1px solid black;
     }
+
+    #floatingButton {
+      background: #6fb6c5;
+      box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.2);
+      transition: transform 0.1s;
+    }
+    #floatingButton:active {
+      transform: scale(0.9, 0.9);
+    }
+
   </style>
 </head>
 
@@ -23,10 +33,12 @@
     Opps, you cannot play draw N guess with this browser!
   </canvas>
 
+  <script src="https://cdn.jsdelivr.net/lodash/4.17.2/lodash.min.js"></script>
   <script src="js/vendors/pep.js"></script>
   <script src="js/libs/Board.js"></script>
   <script src="js/libs/Pointer.js"></script>
   <script src="js/libs/Pen.js"></script>
+  <script src="js/libs/FloatingButton.js"></script>
   <script src="js/main.js"></script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
