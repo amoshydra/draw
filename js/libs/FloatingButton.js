@@ -1,6 +1,9 @@
 var FloatingButton = (function() {
 
   var buttonSize = (Math.max(window.innerWidth, window.innerHeight) > 768) ? 80 : 50;
+  var getOffset = function getOffset(offset, margin) {
+    return offset - margin + 'px';
+  }
    var FloatingButton = {
      dom: null,
      config: {
@@ -17,8 +20,8 @@ var FloatingButton = (function() {
          height: this.config.size + 'px',
          borderRadius: this.config.size + 'px',
          position: 'absolute',
-         top: window.innerHeight - this.config.margin + 'px',
-         left: window.innerWidth - this.config.margin + 'px',
+         top: getOffset(document.body.clientHeight, this.config.margin),
+         left: getOffset(document.body.clientWidth, this.config.margin),
          opacity: this.config.inactiveOpacity
        });
 
@@ -78,10 +81,10 @@ var FloatingButton = (function() {
 
     var buttonRepositioned = function buttonRepositioned(event) {
       if (parseInt(this.dom.style.top) + this.config.margin > window.innerHeight) {
-        this.dom.style.top = window.innerHeight - this.config.margin + 'px';
+        this.dom.style.top = getOffset(document.body.clientHeight, this.config.margin);
       }
       if (parseInt(this.dom.style.left) + this.config.margin > window.innerWidth) {
-        this.dom.style.left = window.innerWidth - this.config.margin + 'px';
+        this.dom.style.left = getOffset(document.body.clientWidth, this.config.margin);
       }
     }
 
