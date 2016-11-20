@@ -5,8 +5,9 @@ var FloatingButton = (function() {
      dom: null,
      config: {
        size: buttonSize,
-       margin: buttonSize * 1.2,
-       opacity: 0.4
+       margin: buttonSize * 1.3,
+       inactiveOpacity: 0.5,
+       activeOpacity: 0.95
      },
      onClick: null,
      init: function init(elementId) {
@@ -18,7 +19,7 @@ var FloatingButton = (function() {
          position: 'absolute',
          top: window.innerHeight - this.config.margin + 'px',
          left: window.innerWidth - this.config.margin + 'px',
-         opacity: this.config.opacity
+         opacity: this.config.inactiveOpacity
        });
 
        // Apply eventListener
@@ -51,7 +52,7 @@ var FloatingButton = (function() {
     var buttonClicked = function buttonClicked(event) {
       clickedId = event.pointerId;
       isActive = true;
-      this.dom.style.opacity = 1;
+      this.dom.style.opacity = this.config.activeOpacity;
     }
     var buttonUnclicked = function buttonUnclicked(event) {
       if (clickedId && (dragCount < 3)) {
@@ -62,7 +63,7 @@ var FloatingButton = (function() {
       isActive = false;
       var self = this;
       setTimeout(function() {
-        if (!isActive) self.dom.style.opacity = self.config.opacity;
+        if (!isActive) self.dom.style.opacity = self.config.inactiveOpacity;
       }, 1000);
     }
 

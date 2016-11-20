@@ -2,10 +2,12 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#efefef">
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   <title>Draw</title>
   <style>
     body {
+      background-color: #efefef;
       text-align:left;
       margin: 0;
       margin-top: 4px;
@@ -14,11 +16,12 @@
     }
     #board {
       touch-action: none;
-      border: 1px solid black;
+      border: 0.5px solid rgba(0,0,0,0.1);
+      box-shadow: 1px 1px 1px 0.5px rgba(0,0,0,0.1);
     }
 
     #floatingButton {
-      background: #6fb6c5;
+      background: #97a5a8;
       box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.2);
       transition: transform 0.1s, opacity 1s;
     }

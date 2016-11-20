@@ -27,6 +27,8 @@ var Board = (function() {
        // Create buffer
        this.domMem = document.createElement('canvas');
        this.ctxMem = this.domMem.getContext('2d');
+       this.ctxMem.fillStyle = this.bgColor;
+       this.ctxMem.fillRect(0,0, this.domMem.width, this.domMem.height);
 
        // Set up sizing
        fitToWindow.bind(this)();
@@ -98,6 +100,8 @@ var Board = (function() {
       this.dom.style.width = widthCss + 'px';
       this.dom.width = widthCanvas;
       this.dom.height = heightCanvas;
+      this.ctx.fillStyle = this.bgColor;
+      this.ctx.fillRect(0,0, this.dom.width, this.dom.height);
       this.ctx.drawImage(this.domMem, 0, 0);
 
       this.pos.x = this.dom.offsetLeft;
