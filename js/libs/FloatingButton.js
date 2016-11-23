@@ -45,8 +45,9 @@ var FloatingButton = (function() {
     }
 
     var applyStyle = function applyStyle(cssStyle) {
-      Object.keys(cssStyle).map((key) => {
-        this.dom.style[key] = cssStyle[key];
+      var self = this;
+      Object.keys(cssStyle).map(function(key) {
+        self.dom.style[key] = cssStyle[key];
       });
     }
 
