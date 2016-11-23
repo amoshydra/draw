@@ -1,3 +1,5 @@
+'use strict'
+
 var Board = (function() {
    var boardObject = {
      resolution: 2,
@@ -42,7 +44,7 @@ var Board = (function() {
        }
      },
      getPointerPos: function getPointerPos(event) {
-       return pos = {
+       return {
          x: (event.pageX - this.pos.x) * this.resolution,
          y: (event.pageY - this.pos.y) * this.resolution
        }

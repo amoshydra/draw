@@ -1,3 +1,4 @@
+'use strict'
 
 // Initialise application
 Board.init('board');
@@ -9,7 +10,7 @@ Pointer.onEmpty = Board.storeMemory.bind(Board);
 // Attach event listener
 var pointerDown = function pointerDown(e) {
   // Initialise pointer
-  pointer = new Pointer(e.pointerId);
+  var pointer = new Pointer(e.pointerId);
   pointer.set(Board.getPointerPos(e));
 
   // Get function type

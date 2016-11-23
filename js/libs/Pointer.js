@@ -1,3 +1,5 @@
+'use strict'
+
 var Pointer = (function() {
 
   var size = 0;

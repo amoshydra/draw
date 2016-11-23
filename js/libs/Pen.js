@@ -1,3 +1,5 @@
+'use strict'
+
 var Pen = (function() {
   var pen = {
     colors: {

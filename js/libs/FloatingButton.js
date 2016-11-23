@@ -1,3 +1,5 @@
+'use strict'
+
 var FloatingButton = (function() {
 
   var buttonSize = (Math.max(window.innerWidth, window.innerHeight) > 768) ? 80 : 50;
