@@ -5,7 +5,7 @@ Board.init('board');
 Pen.init(Board.ctx);
 FloatingButton.init();
 FloatingButton.onClick = Board.clearMemory.bind(Board);
-Pointer.onEmpty = Board.storeMemory.bind(Board);
+Pointer.onEmpty = _.debounce(Board.storeMemory.bind(Board), 1500);
 
 // Attach event listener
 var pointerDown = function pointerDown(e) {
