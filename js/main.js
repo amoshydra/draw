@@ -19,7 +19,7 @@ var pointerDown = function pointerDown(e) {
   else drawOnCanvas(e, pointer, Pen);
 }
 var pointerMove = function pointerMove(e) {
-  if (Pen.funcType && Pen.funcType.includes(Pen.funcTypes.draw)) {
+  if (Pen.funcType && (Pen.funcType.indexOf(Pen.funcTypes.draw) !== -1)) {
 
     var pointer = Pointer.get(e.pointerId);
     drawOnCanvas(e, pointer, Pen);
