@@ -21,7 +21,7 @@ var Board = (function() {
      },
      init: function init(canvasId) {
        this.dom = document.getElementById(canvasId);
-       this.ctx = this.dom.getContext('2d');
+       this.ctx = this.dom.getContext('2d', {desynchronized: true});
 
        // Additional Configuration
        this.ctx.imageSmoothingEnabled = true;
