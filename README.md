@@ -3,7 +3,7 @@
   <p>A web canvas that support pen/touch pressure.</p>
   <br>
 
-  <a href="http://www.amoshydra.com/app/draw">
-    <img alt="Draw" src="http://i.imgur.com/esy0Ia8.png" width="90%">
+  <a href="https://amoshydra.github.io/draw">
+    <img alt="Draw" src="https://github.com/user-attachments/assets/035dd863-40e0-46ff-ada8-79b525bcfee5" width="90%">
   </a><br>
 </div>
